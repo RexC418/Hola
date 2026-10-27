@@ -6,6 +6,12 @@ Minecraft Pocket Edition 0.8.1 (decompiled) with a 1:1 port of the
 
 ## Changelog
 
+* **v1.2 — CI build fix**: `app/src/main/cpp/.gitignore` (inherited from the
+  decompiled project) was ignoring `minecraftpe/impl/pcm_data.c`, so the
+  repository pushed to GitHub was missing the 31 MB embedded-sound source and
+  `libminecraftpe.so` failed to link (106 undefined `PCM_*` symbols). The
+  ignore entries (`pcm_data.c`, `assets/*`, `sounds/*`) were removed; the
+  workflow now accepts SDK licenses before installing the NDK.
 * **v1.1 — Startup crash fix (SIGSEGV in `AAssetManager_open`)**: on some
   devices the game crashed ~1 s after launch
   (`pthread_mutex_lock` <- `AAssetManager_open` <- `TextureAtlas::load`).
