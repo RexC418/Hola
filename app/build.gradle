@@ -1,0 +1,68 @@
+plugins {
+    alias(libs.plugins.android.application)
+}
+
+android {
+    namespace 'com.mojang.minecraftpe'
+    compileSdk 34
+    ndkVersion '26.3.11579264'
+    lintOptions {
+        checkReleaseBuilds false
+        //If you want to continue even if errors found use following line
+        abortOnError false
+    }
+    defaultConfig {
+        applicationId "net.skidcode.gh.mcpe081decomp"
+        minSdk 24
+        targetSdk 34
+        versionCode 1
+        versionName "0.8.1-rd132211"
+        ndk {
+            // Single-ABI build: arm64-v8a only
+            abiFilters 'arm64-v8a'
+        }
+        externalNativeBuild {
+            cmake {
+                cppFlags ''
+                arguments '-DANDROID_STL=c++_static'
+            }
+        }
+    }
+
+    packaging{
+        resources{
+            excludes += "META-INF/DEPENDENCIES"
+            excludes += "META-INF/com/android/build/**"
+            excludes += "META-INF/version-control-info.textproto"
+            excludes += "org/apache/**"
+            excludes += "mozilla/*"
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            // Sign release builds with the debug key so the APK is directly
+            // installable (GitHub Actions has no release keystore).
+            signingConfig signingConfigs.debug
+        }
+
+        debug {
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    externalNativeBuild {
+        cmake {
+            path file('src/main/cpp/CMakeLists.txt')
+            version '3.22.1'
+        }
+    }
+}
+
+dependencies {
+    implementation 'org.apache.httpcomponents:httpclient:4.5.14'
+}
